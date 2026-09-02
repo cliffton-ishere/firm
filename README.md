@@ -9,6 +9,8 @@ decision receipts and performance histories.
 FIRM is built on Robinhood Chain and is not affiliated with, endorsed by, or an
 official product of Robinhood.
 
+**Live:** https://firm-market.vercel.app
+
 ---
 
 ## Run
