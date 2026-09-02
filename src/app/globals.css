@@ -1,26 +1,586 @@
 @import "tailwindcss";
 
+/* ============================================================
+   FIRM — Autonomous Capital Market
+   Design system: ceramic black, gallery white, titanium, signal lime.
+   ============================================================ */
+
+@theme {
+  --color-ink: #080909;
+  --color-ink-1: #0d0f0e;
+  --color-ink-2: #111312;
+  --color-ink-3: #171a18;
+  --color-ink-4: #1f2321;
+
+  --color-gallery: #f4f5f2;
+  --color-gallery-2: #eaebe6;
+  --color-paper: #ffffff;
+
+  --color-titanium: #b8bdb9;
+  --color-mist: #858b87;
+  --color-slate: #5d635f;
+
+  --color-lime: #c7ff4a;
+  --color-lime-dim: #9ecb35;
+  --color-active: #7dff86;
+  --color-amber: #ffb547;
+  --color-coral: #ff7168;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --hairline: rgba(255, 255, 255, 0.1);
+  --hairline-soft: rgba(255, 255, 255, 0.06);
+  --hairline-strong: rgba(255, 255, 255, 0.16);
+  --nav-h: 68px;
+  color-scheme: dark;
+  --grain-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  border-color: var(--hairline);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background-color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-ink);
+  color: var(--color-gallery);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-lime) 82%, transparent);
+  color: #0a0c08;
+}
+
+/* ---------------- Typography primitives ---------------- */
+
+.display {
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.96;
+}
+
+.display-tight {
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.label {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.label-sm {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ---------------- Materials ---------------- */
+
+/* Glass over dark ground */
+.glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.022) 100%
+  );
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid var(--hairline);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 18px 44px -28px rgba(0, 0, 0, 0.9);
+}
+
+.glass-quiet {
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid var(--hairline-soft);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.045);
+}
+
+/* Glass over light ground */
+.glass-light {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid rgba(8, 9, 9, 0.08);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(8, 9, 9, 0.04),
+    0 22px 50px -34px rgba(8, 9, 9, 0.35);
+}
+
+/* Solid elevated ceramic panel — used where blur would be wasted */
+.panel {
+  background: linear-gradient(180deg, #131615 0%, #0e100f 100%);
+  border: 1px solid var(--hairline-soft);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+.panel-flat {
+  background: #0d0f0e;
+  border: 1px solid var(--hairline-soft);
+}
+
+/* Brushed titanium sheen for select surfaces */
+.titanium {
+  background:
+    linear-gradient(
+      104deg,
+      rgba(255, 255, 255, 0.09) 0%,
+      rgba(255, 255, 255, 0.02) 22%,
+      rgba(255, 255, 255, 0.07) 46%,
+      rgba(255, 255, 255, 0.015) 68%,
+      rgba(255, 255, 255, 0.06) 100%
+    ),
+    #101312;
+}
+
+/* ---------------- Ground treatments ---------------- */
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  mix-blend-mode: overlay;
+  background-image: var(--grain-url);
+}
+
+.grid-fine {
+  background-image:
+    linear-gradient(
+      to right,
+      var(--grid-c, rgba(8, 9, 9, 0.045)) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      var(--grid-c, rgba(8, 9, 9, 0.045)) 1px,
+      transparent 1px
+    );
+  background-size: 72px 72px;
+}
+
+.grid-fine-dark {
+  --grid-c: rgba(255, 255, 255, 0.032);
+}
+
+.hairline-t {
+  border-top: 1px solid var(--hairline-soft);
+}
+.hairline-b {
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+/* ---------------- Controls ---------------- */
+
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 1.5px var(--color-ink),
+    0 0 0 3px color-mix(in srgb, var(--color-lime) 78%, transparent);
+}
+
+.focus-ring-light:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 1.5px #ffffff,
+    0 0 0 3px color-mix(in srgb, var(--color-lime-dim) 78%, transparent);
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: inherit;
+  background: transparent;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-slate);
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Range slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 2px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--color-gallery);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: transform 0.16s var(--ease-out-expo);
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--color-gallery);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.24);
+  background-clip: content-box;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------------- Motion ---------------- */
+
+@keyframes firm-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.55);
+  }
+}
+
+@keyframes firm-breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes firm-sweep {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(210%);
+  }
+}
+
+@keyframes firm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes firm-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes firm-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes firm-spin-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes firm-flow {
+  from {
+    stroke-dashoffset: 240;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes firm-core-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.018);
+  }
+}
+
+@keyframes firm-node {
+  0%,
+  68%,
+  100% {
+    opacity: 0.25;
+  }
+  82% {
+    opacity: 1;
+  }
+}
+
+.animate-rise {
+  animation: firm-rise 0.7s var(--ease-out-expo) both;
+}
+
+/* Dialogs animate with CSS, not animation frames, so an overlay can never be
+   left mounted at full opacity when frames are throttled. */
+@keyframes firm-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes firm-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes firm-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes firm-modal-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+}
+
+@keyframes firm-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateX(34px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes firm-sheet-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(26px);
+  }
+}
+
+.dlg-scrim-in {
+  animation: firm-fade-in 0.28s var(--ease-out-expo) both;
+}
+.dlg-scrim-out {
+  animation: firm-fade-out 0.22s var(--ease-in-out-soft) both;
+}
+.dlg-modal-in {
+  animation: firm-modal-in 0.34s var(--ease-out-expo) both;
+}
+.dlg-modal-out {
+  animation: firm-modal-out 0.22s var(--ease-in-out-soft) both;
+}
+.dlg-sheet-in {
+  animation: firm-sheet-in 0.34s var(--ease-out-expo) both;
+}
+.dlg-sheet-out {
+  animation: firm-sheet-out 0.22s var(--ease-in-out-soft) both;
+}
+
+@media (max-width: 639px) {
+  .dlg-modal-in {
+    animation-name: firm-sheet-up-in;
+  }
+  .dlg-modal-out {
+    animation-name: firm-sheet-up-out;
+  }
+}
+
+@keyframes firm-sheet-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes firm-sheet-up-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+.pulse-dot {
+  position: relative;
+}
+.pulse-dot::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.3;
+  animation: firm-pulse 2.6s var(--ease-in-out-soft) infinite;
+}
+
+.sweep {
+  position: relative;
+  overflow: hidden;
+}
+.sweep::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
+  animation: firm-sweep 2.6s var(--ease-in-out-soft) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------- Charts ---------------- */
+
+.recharts-wrapper,
+.recharts-surface {
+  outline: none !important;
+}
+.recharts-cartesian-axis-tick-value {
+  font-variant-numeric: tabular-nums;
 }
